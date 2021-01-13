@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% block title %} Creacion de Autores {% endblock title %}
+{% block body %}
+
+<form method="POST">
+  {% csrf_token %}
+  {% if error %}
+     <h2>{{ error }}</h2>
+  {% else %}
+   {{autor_form.as_p }}
+  {% endif %}
+
+   <button type="submit">Crear</button>
+
+</form>
+
+{% endblock body %}
