@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block title %} Creacion de Autores {% endblock title %}
+{% block title %} Actualizacion de Autores {% endblock title %}
 {% block content %}
 <div class="row">
   <div class="col-6 offset-3">
@@ -14,7 +14,7 @@
          {{ form|crispy }}
         {% endif %}
         <br/>
-        <button type="submit" class="btn btn-light">Guardar</button>
+        <button type="submit" class="btn btn-light">Actualizar</button>
         <a href="{% url 'libro:listar_autor' %}" class="text-danger">Cancelar</a>
       </form>
     </div>

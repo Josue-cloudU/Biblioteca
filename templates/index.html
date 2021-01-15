@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}Index{% endblock title %}</title>
-    {% block extracss%}
-    {% endblock extracss %}
-  </head>
-  <body>
-{% block body %}
-   <h1>Prueba</h1>
-{% endblock body %}
+{% extends 'base.html' %}
+{% block title %}Index{% endblock title %}
+{% block content %}
+<div class="">
+  <h1 class="text-center">BIBLIOTECA VIRTUAL</h1>
+  <br>
+  <br>
+  <br>
+  <h2 class="text-center">¡Bienvenido!</h2>
+</div>
 
-
-{% block extrajs %}
-{% endblock extrajs %}
-  </body>
-</html>
+{% endblock content %}
