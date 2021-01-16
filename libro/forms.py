@@ -11,5 +11,16 @@ class LibroForm(forms.ModelForm):
         model = Libro
         fields = ('titulo', 'fecha_publicacion', 'autor_id')
         widgets = {
-            'fecha_publicacion': forms.DateInput()
+            'titulo': forms.TextInput(
+                attrs = {
+                    'class': 'form-control',
+                    'placeholder': 'Titulo del libro'
+                }
+            ),
+            'fecha_publicacion': forms.DateInput(
+                attrs = {
+                    'class': 'form-control',
+                    'placeholder': 'yyyy-mm-dd'
+                }
+            )
         }
