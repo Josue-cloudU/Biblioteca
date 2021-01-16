@@ -8,14 +8,14 @@ from .models import Autor
 
 class Index(LoginRequiredMixin, generic.TemplateView):
     template_name = "index.html"
-    login_url = "accounts/login"
+    login_url = "login"
 
 class crearAutor(LoginRequiredMixin, generic.CreateView):
     template_name = "libro/crear_autor.html"
     model = Autor
     form_class = AutorForm
     success_url = reverse_lazy("libro:listar_autor")
-    login_url = "accounts/login"
+    login_url = "login"
 
 
 class listarAutor(LoginRequiredMixin, generic.ListView):
@@ -23,7 +23,7 @@ class listarAutor(LoginRequiredMixin, generic.ListView):
     template_name = "libro/listar_autor.html"
     context_object_name = 'autores'
     queryset = Autor.objects.all().order_by('id')
-    login_url = "accounts/login"
+    login_url = "login"
 
 
 class ActualizarAutor(LoginRequiredMixin, generic.UpdateView):
@@ -31,7 +31,7 @@ class ActualizarAutor(LoginRequiredMixin, generic.UpdateView):
     template_name = 'libro/actualizar_autor.html'
     form_class = AutorForm
     success_url = reverse_lazy("libro:listar_autor")
-    login_url = "accounts/login"
+    login_url = "login"
 
 
 

@@ -15,12 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 from libro.views import Index
+from accounts.views import Register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('libro/', include(('libro.urls', 'libro'))),
     path('accounts/', include(('accounts.urls', 'accounts'))),
     path('', Index.as_view(), name="index"),
+
+    path('login/', auth_views.LoginView.as_view(template_name="accounts/login.html"), name="login"),
+    path('logout/', auth_views.LogoutView.as_view(template_name="accounts/login.html"), name="logout"),
+    path('user_register/', Register, name="register"),
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name="accounts/password_reset_form.html"), name="reset_password"),
+    path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name="accounts/password_reset_done.html"), name="password_reset_done"),
+    path('reset/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name="accounts/password_reset_confirm.html"), name="password_reset_confirm"),
+    path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="accounts/password_reset_complete.html"), name="password_reset_complete"),
 
 ]
