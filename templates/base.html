@@ -96,7 +96,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Screens:</h6>
             <a class="collapse-item" href="{% url 'libro:listar_autor' %}">Lista de autores</a>
-            <a class="collapse-item" href="{% url 'libro:crear_autor' %}">Crear autor</a>
+            <a class="collapse-item" href="{% url 'libro:crear_autor' %}">Registrar autor</a>
           </div>
         </div>
       </li>
@@ -110,9 +110,8 @@
         <div id="collapseLibros" class="collapse" aria-labelledby="headingLibros" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Screens:</h6>
-            <a class="collapse-item" href="login.html">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+            <a class="collapse-item" href="{% url 'libro:listar_libro' %}">Listar libros</a>
+            <a class="collapse-item" href="{% url 'libro:crear_libro' %}">Registrar libro</a>
           </div>
         </div>
       </li>
