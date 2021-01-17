@@ -5,8 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.views import generic
-from .forms import CustomUserForm, CustomUserStaffForm
+from .forms import CustomUserForm, CustomUserStaffForm, UpdateUserForm
 # Create your views here.
+
 
 # registrar usuarios desde login
 def Register(request):
@@ -88,3 +89,25 @@ class delete(LoginRequiredMixin, generic.DeleteView):
         object = User.objects.get(id = pk)
         object.delete()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+# actualizar usuarios cualquiera.
+class ActualizarUsuario(LoginRequiredMixin, generic.UpdateView):
+    model = User
+    template_name = 'accounts/modal/updateuser.html'
+    form_class = UpdateUserForm
+    login_url = "login"
+
+    def post(self,request,*args,**kwargs):
+        form = self.form_class(request.POST,instance = self.get_object())
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        else:
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+class DetailUsuario(LoginRequiredMixin, generic.DetailView):
+    model = User
+    form_class = CustomUserStaffForm
+    template_name = 'accounts/profile.html'
+    success_url = reverse_lazy("accounts:listar_usuarios")
+    login_url = "login"
