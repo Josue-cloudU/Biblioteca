@@ -8,11 +8,10 @@
 <table class="table table-striped">
   <thead class="bg-dark">
     <tr>
-      <th class="text-light">Libro ID</th>
       <th class="text-light">Titulo</th>
       <th class="text-light">Autores</th>
       <th class="text-light">Fecha de publicacion</th>
-      <th class="text-light">Fecha de creacion</th>
+      <th></th>
       <th></th>
       <th></th>
     </tr>
@@ -20,7 +19,6 @@
   <tbody>
     {% for libro in libros %}
       <tr>
-        <td class="text-dark">{{ libro.id }}</td>
         <td class="text-dark">{{ libro.titulo }}</td>
         <td class="text-dark">
           {% for autor in libro.autor_id.all %}
@@ -28,30 +26,18 @@
           {% endfor %}
         </td>
         <td class="text-dark">{{ libro.fecha_publicacion }}</td>
-        <td class="text-dark">{{ libro.fecha_creacion }}</td>
-        <td><a href="{% url 'libro:actualizar_Libro' libro.id %}"><button type="button" name="buttton" class="btn btn-secondary">Editar</button></a></td>
         <td>
-          <a class="btn btn-secondary" href="" data-toggle="modal" data-target="#elimModal">Eliminar</a>
+          <button class="btn btn-secondary" onclick="abrir_modal_edicion('{% url 'libro:actualizar_Libro' libro.id %}')">Editar</button>
+        </td>
+        <td>
+          <!-- <a class="btn btn-secondary" href="" data-toggle="modal" data-target="#elimLogModal">Eliminacion logica</a> -->
+          <button class="btn btn-secondary" onclick="abrir_modal_elimlog('{% url 'libro:eliminar_libro' libro.id %}')">Eliminacion logica</button>
+        </td>
+        <td>
+          <!-- <a class="btn btn-secondary" href="" data-toggle="modal" data-target="#elimModal">Eliminacion total</a> -->
+          <button class="btn btn-secondary" onclick="abrir_modal_elim('{% url 'libro:delete_libro' libro.id %}')">Eliminacion total</button>
         </td>
       </tr>
-      <!-- Modal-->
-      <div class="modal fade" id="elimModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-danger" id="exampleModalLabel">¿Desea eliminar el libro {{libro.titulo}}?</h5>
-              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div class="modal-body">Esta accion puede eliminar datos en cascada.</div>
-            <div class="modal-footer">
-              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-               <a href="{% url 'libro:delete_libro' libro.id %}"><button type="submit" class="btn btn-danger">Eliminar</button></a>
-            </div>
-          </div>
-        </div>
-      </div>
     {% endfor %}
   </tbody>
 </table>
@@ -60,5 +46,29 @@
 <h1>No existen libros registrados</h1>
 
 {% endif %}
-
+<!-- Modales-->
+<div class="modal fade" id="editar" role="dialog"></div>
+<div class="modal fade" id="elimLogModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="elimModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
 {% endblock content %}
+
+{% block js_scripts %}
+<script type="text/javascript">
+  var $ = jQuery.noConflict();
+  function abrir_modal_edicion(url){
+    $('#editar').load(url, function(){
+      $(this).modal('show');
+    });
+  }
+  function abrir_modal_elimlog(url){
+    $('#elimLogModal').load(url, function(){
+      $(this).modal('show');
+    });
+  }
+  function abrir_modal_elim(url){
+    $('#elimModal').load(url, function(){
+      $(this).modal('show');
+    });
+  }
+</script>
+{% endblock js_scripts %}

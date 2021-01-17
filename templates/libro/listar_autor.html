@@ -8,11 +8,10 @@
 <table class="table table-striped">
   <thead class="bg-dark">
     <tr>
-      <th class="text-light">Autor ID</th>
       <th class="text-light">Nombres</th>
       <th class="text-light">Apellidos</th>
       <th class="text-light">Nacionalidad</th>
-      <th class="text-light">Descripcion</th>
+      <th></th>
       <th></th>
       <th></th>
     </tr>
@@ -20,34 +19,22 @@
   <tbody>
     {% for autor in autores %}
       <tr>
-        <td class="text-dark">{{ autor.id }}</td>
         <td class="text-dark">{{ autor.nombre }}</td>
         <td class="text-dark">{{ autor.apellidos }}</td>
         <td class="text-dark">{{ autor.nacionalidad }}</td>
-        <td class="text-dark">{{ autor.descripcion }}</td>
-        <td><a href="{% url 'libro:actualizar_autor' autor.id %}"><button type="button" name="buttton" class="btn btn-secondary">Editar</button></a></td>
         <td>
-          <a class="btn btn-secondary" href="" data-toggle="modal" data-target="#elimModal">Eliminar</a>
+          <!-- <a href="{% url 'libro:actualizar_autor' autor.id %}"><button type="button" name="buttton" class="btn btn-secondary">Editar</button></a> -->
+          <button class="btn btn-secondary" onclick="abrir_modal_edicion('{% url 'libro:actualizar_autor' autor.id %}')">Editar</button>
+        </td>
+        <td>
+          <!-- <a class="btn btn-secondary" href="" data-toggle="modal" data-target="#elimLogModal">Eliminacion logica</a> -->
+          <button class="btn btn-secondary" onclick="abrir_modal_elimlog('{% url 'libro:eliminar_autor' autor.id %}')">Eliminacion logica</button>
+        </td>
+        <td>
+          <!-- <a class="btn btn-secondary" href="" data-toggle="modal" data-target="#elimModal">Eliminacion total</a> -->
+          <button class="btn btn-secondary" onclick="abrir_modal_elim('{% url 'libro:delete_autor' autor.id %}')">Eliminacion total</button>
         </td>
       </tr>
-      <!-- Modal-->
-      <div class="modal fade" id="elimModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-danger" id="exampleModalLabel">¿Desea eliminar el autor {{autor.nombre}}?</h5>
-              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div class="modal-body">Esta accion puede eliminar datos en cascada como libros u articulos relacionados con el autor.</div>
-            <div class="modal-footer">
-              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-               <a href="{% url 'libro:delete_autor' autor.id %}"><button type="submit" class="btn btn-danger">Eliminar</button></a>
-            </div>
-          </div>
-        </div>
-      </div>
     {% endfor %}
   </tbody>
 </table>
@@ -56,5 +43,29 @@
 <h1>No existen autores registrados</h1>
 
 {% endif %}
-
+<!-- Modales-->
+<div class="modal fade" id="editar" role="dialog"></div>
+<div class="modal fade" id="elimLogModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="elimModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
 {% endblock content %}
+
+{% block js_scripts %}
+<script type="text/javascript">
+  var $ = jQuery.noConflict();
+  function abrir_modal_edicion(url){
+    $('#editar').load(url, function(){
+      $(this).modal('show');
+    });
+  }
+  function abrir_modal_elimlog(url){
+    $('#elimLogModal').load(url, function(){
+      $(this).modal('show');
+    });
+  }
+  function abrir_modal_elim(url){
+    $('#elimModal').load(url, function(){
+      $(this).modal('show');
+    });
+  }
+</script>
+{% endblock js_scripts %}

@@ -1,0 +1,19 @@
+<!-- Modal logica-->
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header alert alert-danger">
+        <h5 class="modal-title text-danger" id="exampleModalLabel">¿Desea eliminar el libro {{object.titulo}}?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Esta accion puede eliminar el libro de todas las listas, aun asi se mantiene en la base de datos.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <form action="{% url 'libro:eliminar_libro' object.id %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Eliminar</button>
+        </form>
+      </div>
+    </div>
+  </div>

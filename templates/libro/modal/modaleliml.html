@@ -1,0 +1,20 @@
+<!-- Modal total-->
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header alert alert-danger">
+        <h5 class="modal-title text-danger" id="exampleModalLabel">¿Desea eliminar el libro {{object.titulo}}?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Esta accion puede eliminar el libro de la base de datos y eliminar datos en cascada de el objeto libro.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+         <!-- <a href="{% url 'libro:delete_libro' object.id %}"><button type="submit" class="btn btn-danger">Eliminar</button></a> -->
+         <form action="{% url 'libro:delete_libro' object.id %}" method="POST">
+           {% csrf_token %}
+         <button type="submit" class="btn btn-danger">Eliminar</button>
+         </form>
+      </div>
+    </div>
+  </div>
