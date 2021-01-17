@@ -28,29 +28,46 @@ class listarAutor(LoginRequiredMixin, generic.ListView):
 
 class ActualizarAutor(LoginRequiredMixin, generic.UpdateView):
     model = Autor
-    template_name = 'libro/actualizar_autor.html'
+    template_name = 'libro/modal/modaledita.html'
     form_class = AutorForm
     success_url = reverse_lazy("libro:listar_autor")
     login_url = "login"
 
-#Eliminacion total del objeto autor sin plantilla
-def delete(request, id):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    # Recuperamos la instancia de la persona y la borramos
-    instancia = Autor.objects.get(id = id)
-    instancia.delete()#eliminacion total de labase de datos
-    # Después redireccionamos de nuevo a la lista
-    return redirect("libro:listar_autor")
+class delete(LoginRequiredMixin, generic.DeleteView):
+    model = Autor
+    template_name = 'libro/modal/modalelima.html'
+    success_url = reverse_lazy("libro:listar_autor")
+    login_url = "login"
 
-#Eliminacion logia de las listas de autor sin plantillas
-def eliminarAutor(request, id):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    autor = Autor.objects.get(id = id)
-    autor.estado = False
-    autor.save()
-    return redirect("libro:listar_autor")
+# #Eliminacion total del objeto autor sin plantilla
+# def delete(request, id):
+#     if not request.user.is_authenticated:
+#         return redirect('login')
+#     # Recuperamos la instancia de la persona y la borramos
+#     instancia = Autor.objects.get(id = id)
+#     instancia.delete()#eliminacion total de labase de datos
+#     # Después redireccionamos de nuevo a la lista
+#     return redirect("libro:listar_autor")
+
+class eliminarAutor(LoginRequiredMixin, generic.DeleteView):
+    model = Autor
+    template_name = 'libro/modal/modalelimal.html'
+    login_url = "login"
+
+    def post(self,request,pk,*args,**kwargs):
+        autor = Autor.objects.get(id = pk)
+        autor.estado = False
+        autor.save()
+        return redirect("libro:listar_autor")
+
+# #Eliminacion logia de las listas de autor sin plantillas
+# def eliminarAutor(request, id):
+#     if not request.user.is_authenticated:
+#         return redirect('login')
+#     autor = Autor.objects.get(id = id)
+#     autor.estado = False
+#     autor.save()
+#     return redirect("libro:listar_autor")
 
 class ListarLibro(LoginRequiredMixin, generic.ListView):
     model = Libro

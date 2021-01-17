@@ -5,8 +5,8 @@ urlpatterns = [
     path('crear_autor/', views.crearAutor.as_view(), name='crear_autor'),
     path('listar_autor/', views.listarAutor.as_view(), name='listar_autor'),
     path('actualizar_autor/<int:pk>', views.ActualizarAutor.as_view(), name='actualizar_autor'),
-    path('delete_autor/<int:id>', views.delete, name='delete_autor'),
-    path('eliminar_autor/<int:id>', views.eliminarAutor, name='eliminar_autor'),
+    path('delete_autor/<int:pk>', views.delete.as_view(), name='delete_autor'),
+    path('eliminar_autor/<int:pk>', views.eliminarAutor.as_view(), name='eliminar_autor'),
 
     path('listar_libro/', views.ListarLibro.as_view(), name='listar_libro'),
     path('crear_libro/', views.crearLibro.as_view(), name='crear_libro'),
