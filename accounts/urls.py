@@ -4,4 +4,5 @@ from accounts import views
 
 urlpatterns = [
     path('listar_usuarios/', views.ListadoUsuarios.as_view(), name='listar_usuarios'),
+    path('user_registerstaff/', views.RegistrarUsuarioS.as_view(), name="registerstaff"),
 ]

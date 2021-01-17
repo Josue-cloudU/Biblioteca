@@ -3,7 +3,7 @@
 
 {% block content %}
 
-{% if object %}
+{% if users %}
 
 <table class="table table-striped">
   <thead class="bg-dark">
@@ -12,18 +12,20 @@
       <th class="text-light">Username</th>
       <th class="text-light">Nombres</th>
       <th class="text-light">Apellidos</th>
+      <th class="text-light">Correo electronico</th>
       <th></th>
       <th></th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-    {% for usuario in object_list %}
+    {% for usuario in users %}
       <tr>
         <td class="text-dark">{{ usuario.id }}</td>
         <td class="text-dark">{{ usuario.username }}</td>
         <td class="text-dark">{{ usuario.first_name }}</td>
         <td class="text-dark">{{ usuario.last_name }}</td>
+        <td class="text-dark">{{ usuario.email }}</td>
         <td>
           <a class="btn btn-secondary" href="">Eliminacion logica</a>
         </td>
