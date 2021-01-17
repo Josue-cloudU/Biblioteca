@@ -24,15 +24,15 @@
         <td class="text-dark">{{ autor.nacionalidad }}</td>
         <td>
           <!-- <a href="{% url 'libro:actualizar_autor' autor.id %}"><button type="button" name="buttton" class="btn btn-secondary">Editar</button></a> -->
-          <button class="btn btn-secondary" onclick="abrir_modal_edicion('{% url 'libro:actualizar_autor' autor.id %}')">Editar</button>
+          <button class="btn btn-secondary" onclick="abrir_modal('{% url 'libro:actualizar_autor' autor.id %}')">Editar</button>
         </td>
         <td>
           <!-- <a class="btn btn-secondary" href="" data-toggle="modal" data-target="#elimLogModal">Eliminacion logica</a> -->
-          <button class="btn btn-secondary" onclick="abrir_modal_elimlog('{% url 'libro:eliminar_autor' autor.id %}')">Eliminacion logica</button>
+          <button class="btn btn-secondary" onclick="abrir_modal('{% url 'libro:eliminar_autor' autor.id %}')">Eliminacion logica</button>
         </td>
         <td>
           <!-- <a class="btn btn-secondary" href="" data-toggle="modal" data-target="#elimModal">Eliminacion total</a> -->
-          <button class="btn btn-secondary" onclick="abrir_modal_elim('{% url 'libro:delete_autor' autor.id %}')">Eliminacion total</button>
+          <button class="btn btn-secondary" onclick="abrir_modal('{% url 'libro:delete_autor' autor.id %}')">Eliminacion total</button>
         </td>
       </tr>
     {% endfor %}
@@ -40,30 +40,18 @@
 </table>
 {% else %}
 
-<h1>No existen autores registrados</h1>
+<h1 class="text-center">No existen autores registrados</h1>
 
 {% endif %}
 <!-- Modales-->
-<div class="modal fade" id="editar" role="dialog"></div>
-<div class="modal fade" id="elimLogModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
-<div class="modal fade" id="elimModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="abrirmodal" role="dialog"></div>
 {% endblock content %}
 
 {% block js_scripts %}
 <script type="text/javascript">
   var $ = jQuery.noConflict();
-  function abrir_modal_edicion(url){
-    $('#editar').load(url, function(){
-      $(this).modal('show');
-    });
-  }
-  function abrir_modal_elimlog(url){
-    $('#elimLogModal').load(url, function(){
-      $(this).modal('show');
-    });
-  }
-  function abrir_modal_elim(url){
-    $('#elimModal').load(url, function(){
+  function abrir_modal(url){
+    $('#abrirmodal').load(url, function(){
       $(this).modal('show');
     });
   }

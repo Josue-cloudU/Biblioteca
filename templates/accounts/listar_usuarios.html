@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %} Listado de usuarios {% endblock title %}
+{% block title %} Listado de Usuarios {% endblock title %}
 
 {% block content %}
 
@@ -8,10 +8,8 @@
 <table class="table table-striped">
   <thead class="bg-dark">
     <tr>
-      <th class="text-light">ID</th>
       <th class="text-light">Username</th>
-      <th class="text-light">Nombres</th>
-      <th class="text-light">Apellidos</th>
+      <th class="text-light">Nombre</th>
       <th class="text-light">Correo electronico</th>
       <th></th>
       <th></th>
@@ -21,19 +19,17 @@
   <tbody>
     {% for usuario in users %}
       <tr>
-        <td class="text-dark">{{ usuario.id }}</td>
         <td class="text-dark">{{ usuario.username }}</td>
-        <td class="text-dark">{{ usuario.first_name }}</td>
-        <td class="text-dark">{{ usuario.last_name }}</td>
+        <td class="text-dark">{{ usuario.first_name }} {{ usuario.last_name }}</td>
         <td class="text-dark">{{ usuario.email }}</td>
         <td>
-          <a class="btn btn-secondary" href="">Eliminacion logica</a>
+          <button class="btn btn-secondary" onclick="abrir_modal('{% url 'accounts:userban' usuario.id %}')">Modificar</button>
         </td>
         <td>
-          <a class="btn btn-secondary" href="">Eliminacion logica</a>
+          <button class="btn btn-secondary" onclick="abrir_modal('{% url 'accounts:userban' usuario.id %}')">Banear</button>
         </td>
         <td>
-          <a class="btn btn-secondary" href="">Eliminacion total</a>
+          <button class="btn btn-secondary" onclick="abrir_modal('{% url 'accounts:user_delete' usuario.id %}')">Eliminar</button>
         </td>
       </tr>
     {% endfor %}
@@ -41,7 +37,20 @@
 </table>
 {% else %}
 
-<h1>No existen usuarios registrados</h1>
+<h1 class="text-center">No existen usuarios registrados</h1>
 
 {% endif %}
+<!-- Modales-->
+<div class="modal fade" id="abrirmodal" role="dialog"></div>
 {% endblock content %}
+
+{% block js_scripts %}
+<script type="text/javascript">
+  var $ = jQuery.noConflict();
+  function abrir_modal(url){
+    $('#abrirmodal').load(url, function(){
+      $(this).modal('show');
+    });
+  }
+</script>
+{% endblock js_scripts %}
