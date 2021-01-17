@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from .forms import CustomUserForm
-
 # Create your views here.
 
 def Register(request):
@@ -19,3 +20,9 @@ def Register(request):
     else:
         form = CustomUserForm()
     return render(request, 'accounts/register.html', {'form': form})
+
+class ListadoUsuarios(LoginRequiredMixin, generic.ListView):
+    model = User
+    template_name = 'accounts/listar_usuarios.html'
+    queryset = User.objects.filter(is_active = True).order_by('id')
+    login_url = "login"
