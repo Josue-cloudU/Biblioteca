@@ -27,7 +27,7 @@
         <hr/>
         <div style="padding: 10px;">
           <p class="cardd-text">Autores:</p>
-            {% for autor in object.libro.autor_id.all %}
+            {% for autor in object.autor_id.all %}
               <p>{{ autor.nombre }}</p>
             {% endfor %}
         </div>
