@@ -19,7 +19,7 @@
   <tbody>
     {% for usuario in users %}
       <tr>
-        <td class="text-dark"><a href="{% url 'accounts:user_detail' usuario.id %}">{{ usuario.username }}</a></td>
+        <td class="text-primary"><a onclick="abrir_modal('{% url 'accounts:user_detailm' usuario.id %}')">{{ usuario.username }}</a></td>
         <td class="text-dark">{{ usuario.first_name }} {{ usuario.last_name }}</td>
         <td class="text-dark">{{ usuario.email }}</td>
         <td>

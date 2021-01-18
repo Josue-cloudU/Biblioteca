@@ -109,5 +109,10 @@ class DetailUsuario(LoginRequiredMixin, generic.DetailView):
     model = User
     form_class = CustomUserStaffForm
     template_name = 'accounts/profile.html'
-    success_url = reverse_lazy("accounts:listar_usuarios")
+    login_url = "login"
+
+class DetailUsuariom(LoginRequiredMixin, generic.DetailView):
+    model = User
+    form_class = CustomUserStaffForm
+    template_name = 'accounts/modal/profile.html'
     login_url = "login"
