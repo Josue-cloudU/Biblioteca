@@ -11,6 +11,8 @@
       <th class="text-light">Titulo</th>
       <th class="text-light">Autores</th>
       <th class="text-light">Fecha de publicacion</th>
+      <th class="text-light">Disponibles: </th>
+      <th class="text-light">Estado</th>
       <th></th>
       <th></th>
       <th></th>
@@ -26,6 +28,8 @@
           {% endfor %}
         </td>
         <td class="text-dark">{{ libro.fecha_publicacion }}</td>
+        <td class="text-dark">{{ libro.cantidad }}</td>
+        <td class="text-dark">{{ libro.estado }}</td>
         <td>
           <button class="btn btn-secondary" onclick="abrir_modal('{% url 'libro:actualizar_Libro' libro.id %}')">Editar</button>
         </td>
@@ -53,7 +57,7 @@
 {% block js_scripts %}
 <script type="text/javascript">
   var $ = jQuery.noConflict();
-  function abrir_modal_edicion(url){
+  function abrir_modal(url){
     $('#abrirmodal').load(url, function(){
       $(this).modal('show');
     });

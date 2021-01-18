@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %} Listado de  libros {% endblock title %}
+
+{% block content %}
+
+<table class="table table-striped">
+  <thead class="bg-dark">
+    <tr>
+      <th class="text-light">Titulo</th>
+      <th class="text-light">Fecha de reserva</th>
+      <th class="text-light">Cantidad de dias reservados: </th>
+      <th class="text-light">Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for object in object_list %}
+      <tr>
+        <td class="text-dark">{{ object.libro }}</td>
+        <td class="text-dark">{{ object.fecha_creacion}}</td>
+        <td class="text-dark">{{ object.cantidad_dias}}</td>
+        <td class="text-dark">
+          {% if object.estado %}
+            <p>Al corriente</p>
+          {% else %}
+            <p>Vencido</p>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

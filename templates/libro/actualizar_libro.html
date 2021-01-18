@@ -6,7 +6,7 @@
   <div class="col-6 offset-3">
     <div class="card bg-dark" style="padding: 10px;">
       <h1 class="text-light">Formulario de Libro</h1>
-      <form method="POST" class="text-light">
+      <form method="POST" class="text-light" enctype="multipart/form-data">
         {% csrf_token %}
         {% if error %}
            <h2>{{ error }}</h2>
@@ -15,7 +15,7 @@
         {% endif %}
         <br/>
         <button type="submit" class="btn btn-light">Guardar</button>
-        <a href="{% url 'libro:listar_libro' %}" class="text-danger">Cancelar</a>
+        <a href="{% url 'libro:listar_libro' %}" class="text-danger" >Cancelar</a>
       </form>
     </div>
   </div>
