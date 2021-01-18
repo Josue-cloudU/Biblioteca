@@ -13,8 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.views.static import serve
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.contrib.auth import views as auth_views
 from libro.views import Index
 from accounts.views import Register
@@ -33,4 +35,11 @@ urlpatterns = [
     path('reset/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name="accounts/password_reset_confirm.html"), name="password_reset_confirm"),
     path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="accounts/password_reset_complete.html"), name="password_reset_complete"),
 
+]
+
+# serve servidor para mostrar las imagenes en el navegador cuando sea necesario
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve,{
+        'document_root': settings.MEDIA_ROOT,
+    })
 ]
