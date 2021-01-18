@@ -81,16 +81,11 @@ django_on_heroku.settings(locals())
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+
 ON_HEROKU = os.environ.get('ON_HEROKU')
 if ON_HEROKU:
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'de3eag29bnglle',
-        'USER': 'zqrrugcbtiyqwx',
-        'PASSWORD': '0d0fd4f7acfac8cfc25670dc1cd12bd0bd1fcf14142d096bad8c368b203f4b1f',
-        'HOST': 'ec2-54-205-187-125.compute-1.amazonaws.com',
-        'PORT': '5432',
-    }
+    DATABASES = {}
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 else:
     DATABASES = {
         'default': {
