@@ -143,15 +143,25 @@ class listarlibrosdisponibles(LoginRequiredMixin, generic.ListView):
     queryset = Libro.objects.filter(estado = True, cantidad__gte = 1).order_by('id')
     login_url = "login"
 
+class listarlibrosReservados(LoginRequiredMixin, generic.ListView):
+    model = Reservas
+    template_name = "libro/listar_libro_reservados.html"
+    login_url = "login"
+
+    def get_queryset(self):
+        queryset = Reservas.objects.filter(user = self.request.user)
+        return queryset
+
 class libroDetailView(LoginRequiredMixin, generic.DetailView):
     model = Libro
     form_class = LibroForm
     template_name = 'libro/libro_detail.html'
     login_url = "login"
-
+    # si la cantidad de libros disponibles es 0 no se puede entrar al detalle de ese libro
     def get(self, request, *args, **kwargs):
         if self.get_object().cantidad > 0:
-            return render(request, self.template_name, 'object':self.get_object())
+            return render(request, self.template_name,{'object':self.get_object()})
+        return redirect('libro:listar_libro_disponibles')
 
 class registrarReserva(LoginRequiredMixin, generic.CreateView):
     model = Reservas
@@ -161,12 +171,18 @@ class registrarReserva(LoginRequiredMixin, generic.CreateView):
         if request.method == 'POST':
             libro = Libro.objects.get(id = pk)
             user = User.objects.get(id = request.user.id)
+            print(request.POST)#pruebas de verificacion de datos en consola
+            print(libro, user)
             if libro and user:
-                nueva_reserva = self.model(
-                     libro = libro,
-                     user = user
-                )
-                nueva_reserva.save()
-                print(request.POST)#pruebas de verificacion de datos en consola
-                print(libro, user)
+                if libro.cantidad > 0:
+                    # si la cantidad de libros disponibles es mayor a 0 puede reservar
+                    nueva_reserva = self.model(
+                         libro = libro,
+                         user = user
+                    )
+                    nueva_reserva.save()
+                    print(request.POST)#pruebas de verificacion de datos en consola
+                    print(libro, user)
+                else:
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

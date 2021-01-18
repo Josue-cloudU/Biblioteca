@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 # Create your models here.
 class Autor(models.Model):
     id = models.AutoField(primary_key = True)
@@ -62,4 +62,11 @@ def reducir_cantidad_libro(sender, instance, **kwargs):
         libro.cantidad = libro.cantidad - 1
         libro.save()
 
+# para que no se pueda realizar reservas desde el admin cuando no hay libros disponibles
+def validar_creacion_reserva(sender, instance, **kwargs):
+    libro = instance.libro
+    if libro.cantidad < 1:
+        raise Exception ("No se puede reservar ya que no hay libros disponibles")
+
 post_save.connect(reducir_cantidad_libro, sender = Reservas)
+pre_save.connect(validar_creacion_reserva, sender = Reservas)

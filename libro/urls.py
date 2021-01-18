@@ -16,6 +16,7 @@ urlpatterns = [
     path('eliminar_libro/<int:pk>/', views.eliminarLibro.as_view(), name='eliminar_libro'),
     # urls para usuarios generales y con gion para que en los navegadores se interprete como url amigable
     path('listar-libro-disponibles/', views.listarlibrosdisponibles.as_view(), name='listar_libro_disponibles'),
+    path('listar-libro-reservados/', views.listarlibrosReservados.as_view(), name='listar_libro_reservados'),
     path('detalles-libro/<int:pk>/', views.libroDetailView.as_view(), name='detalle_libro'),
     path('reservar-libro/<int:pk>/', views.registrarReserva.as_view(), name='reserva_libro'),
 ]
