@@ -62,7 +62,6 @@
           </div>
         </div>
       </li>
-      {% endif %}
       <!-- Divider -->
       <hr class="sidebar-divider">
 
@@ -103,6 +102,29 @@
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
+      {% endif %}
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        General pages
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsetree" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-book"></i>
+          <span>Libros</span>
+        </a>
+        <div id="collapsetree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Screens:</h6>
+            <a class="collapse-item" href="{% url 'libro:listar_libro_disponibles' %}"> lista de libros</a>
+            <a class="collapse-item" href="{% url 'libro:listar_libro_reservados' %}"> lista de libros reservados</a>
+          </div>
+        </div>
+      </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider">
 
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">

@@ -34,9 +34,10 @@ class AutorForm(forms.ModelForm):
         }
 
 class LibroForm(forms.ModelForm):
+    imagen = forms.ImageField(required=False)
     class Meta:
         model = Libro
-        fields = ('titulo', 'fecha_publicacion', 'autor_id', 'estado')
+        fields = ('titulo', 'fecha_publicacion', 'autor_id', 'descripcion', 'imagen', 'cantidad', 'estado')
         widgets = {
             'titulo': forms.TextInput(
                 attrs = {

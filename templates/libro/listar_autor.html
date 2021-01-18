@@ -11,6 +11,7 @@
       <th class="text-light">Nombres</th>
       <th class="text-light">Apellidos</th>
       <th class="text-light">Nacionalidad</th>
+      <th class="text-light">Estado</th>
       <th></th>
       <th></th>
       <th></th>
@@ -22,6 +23,7 @@
         <td class="text-dark">{{ autor.nombre }}</td>
         <td class="text-dark">{{ autor.apellidos }}</td>
         <td class="text-dark">{{ autor.nacionalidad }}</td>
+        <td class="text-dark">{{ autor.estado}}</td>
         <td>
           <!-- <a href="{% url 'libro:actualizar_autor' autor.id %}"><button type="button" name="buttton" class="btn btn-secondary">Editar</button></a> -->
           <button class="btn btn-secondary" onclick="abrir_modal('{% url 'libro:actualizar_autor' autor.id %}')">Editar</button>

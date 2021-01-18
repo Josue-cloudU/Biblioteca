@@ -1,16 +1,25 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
 from .forms import AutorForm, LibroForm
-from .models import Autor, Libro
+from .models import Autor, Libro, Reservas
+from django.contrib.auth.models import User
+# mixin personalizado
+class AdminMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_staff:#si el usuario es administrador/staff
+            return super().dispatch(request,*args, **kwargs)#lo deja continuar
+        return redirect('index')#de lo contrario lo redirecciona al index
+
 
 class Index(LoginRequiredMixin, generic.TemplateView):
     template_name = "index.html"
     login_url = "login"
 
-class crearAutor(LoginRequiredMixin, generic.CreateView):
+class crearAutor(LoginRequiredMixin, AdminMixin, generic.CreateView):
     template_name = "libro/crear_autor.html"
     model = Autor
     form_class = AutorForm
@@ -18,22 +27,22 @@ class crearAutor(LoginRequiredMixin, generic.CreateView):
     login_url = "login"
 
 
-class listarAutor(LoginRequiredMixin, generic.ListView):
+class listarAutor(LoginRequiredMixin, AdminMixin, generic.ListView):
     model = Autor
     template_name = "libro/listar_autor.html"
     context_object_name = 'autores'
-    queryset = Autor.objects.filter(estado = True).order_by('id')
+    queryset = Autor.objects.all().order_by('id')
     login_url = "login"
 
 
-class ActualizarAutor(LoginRequiredMixin, generic.UpdateView):
+class ActualizarAutor(LoginRequiredMixin, AdminMixin, generic.UpdateView):
     model = Autor
     template_name = 'libro/modal/modaledita.html'
     form_class = AutorForm
     success_url = reverse_lazy("libro:listar_autor")
     login_url = "login"
 
-class delete(LoginRequiredMixin, generic.DeleteView):
+class delete(LoginRequiredMixin, AdminMixin, generic.DeleteView):
     model = Autor
     template_name = 'libro/modal/modalelima.html'
     success_url = reverse_lazy("libro:listar_autor")
@@ -49,7 +58,7 @@ class delete(LoginRequiredMixin, generic.DeleteView):
 #     # Después redireccionamos de nuevo a la lista
 #     return redirect("libro:listar_autor")
 
-class eliminarAutor(LoginRequiredMixin, generic.DeleteView):
+class eliminarAutor(LoginRequiredMixin, AdminMixin, generic.DeleteView):
     model = Autor
     template_name = 'libro/modal/modalelimal.html'
     login_url = "login"
@@ -69,28 +78,28 @@ class eliminarAutor(LoginRequiredMixin, generic.DeleteView):
 #     autor.save()
 #     return redirect("libro:listar_autor")
 
-class ListarLibro(LoginRequiredMixin, generic.ListView):
+class ListarLibro(LoginRequiredMixin, AdminMixin, generic.ListView):
     model = Libro
     template_name = "libro/listar_libro.html"
     context_object_name = 'libros'
-    queryset = Libro.objects.filter(estado = True).order_by('id')
+    queryset = Libro.objects.all().order_by('id')
     login_url = "login"
 
-class crearLibro(LoginRequiredMixin, generic.CreateView):
+class crearLibro(LoginRequiredMixin, AdminMixin, generic.CreateView):
     template_name = "libro/crear_libro.html"
     model = Libro
     form_class = LibroForm
     success_url = reverse_lazy("libro:listar_libro")
     login_url = "login"
 
-class ActualizarLibro(LoginRequiredMixin, generic.UpdateView):
+class ActualizarLibro(LoginRequiredMixin, AdminMixin, generic.UpdateView):
     model = Libro
     template_name = 'libro/modal/modaleditl.html'
     form_class = LibroForm
     success_url = reverse_lazy("libro:listar_libro")
     login_url = "login"
 
-class deleteLibro(LoginRequiredMixin, generic.DeleteView):
+class deleteLibro(LoginRequiredMixin, AdminMixin, generic.DeleteView):
     model = Libro
     template_name = 'libro/modal/modaleliml.html'
     success_url = reverse_lazy("libro:listar_libro")
@@ -106,7 +115,7 @@ class deleteLibro(LoginRequiredMixin, generic.DeleteView):
 #     # Después redireccionamos de nuevo a la lista
 #     return redirect("libro:listar_libro")
 
-class eliminarLibro(LoginRequiredMixin, generic.DeleteView):
+class eliminarLibro(LoginRequiredMixin, AdminMixin, generic.DeleteView):
     model = Libro
     template_name = 'libro/modal/modalelimll.html'
     login_url = "login"
@@ -125,3 +134,55 @@ class eliminarLibro(LoginRequiredMixin, generic.DeleteView):
 #     libro.estado = False
 #     libro.save()
 #     return redirect("libro:listar_libro")
+
+# seccion para vistas de los usuarios normales ------------------------------------------------------------------------
+class listarlibrosdisponibles(LoginRequiredMixin, generic.ListView):
+    model = Libro
+    template_name = "libro/listar_libro_disponibles.html"
+    context_object_name = 'libros'
+    queryset = Libro.objects.filter(estado = True, cantidad__gte = 1).order_by('id')
+    login_url = "login"
+
+class listarlibrosReservados(LoginRequiredMixin, generic.ListView):
+    model = Reservas
+    template_name = "libro/listar_libro_reservados.html"
+    login_url = "login"
+
+    def get_queryset(self):
+        queryset = Reservas.objects.filter(user = self.request.user)
+        return queryset
+
+class libroDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Libro
+    form_class = LibroForm
+    template_name = 'libro/libro_detail.html'
+    login_url = "login"
+    # si la cantidad de libros disponibles es 0 no se puede entrar al detalle de ese libro
+    def get(self, request, *args, **kwargs):
+        if self.get_object().cantidad > 0:
+            return render(request, self.template_name,{'object':self.get_object()})
+        return redirect('libro:listar_libro_disponibles')
+
+class registrarReserva(LoginRequiredMixin, generic.CreateView):
+    model = Reservas
+    success_url = reverse_lazy("libro:listar_libro_disponibles")
+
+    def post(self,request,pk,*args,**kwargs):
+        if request.method == 'POST':
+            libro = Libro.objects.get(id = pk)
+            user = User.objects.get(id = request.user.id)
+            print(request.POST)#pruebas de verificacion de datos en consola
+            print(libro, user)
+            if libro and user:
+                if libro.cantidad > 0:
+                    # si la cantidad de libros disponibles es mayor a 0 puede reservar
+                    nueva_reserva = self.model(
+                         libro = libro,
+                         user = user
+                    )
+                    nueva_reserva.save()
+                    print(request.POST)#pruebas de verificacion de datos en consola
+                    print(libro, user)
+                else:
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
