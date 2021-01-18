@@ -8,6 +8,12 @@ from django.views import generic
 from .forms import CustomUserForm, CustomUserStaffForm, UpdateUserForm
 # Create your views here.
 
+# mixin personalizado
+class AdminMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_staff:#si el usuario es administrador/staff
+            return super().dispatch(request,*args, **kwargs)#lo deja continuar
+        return redirect('index')#de lo contrario lo redirecciona al index
 
 # registrar usuarios desde login
 def Register(request):
@@ -26,7 +32,7 @@ def Register(request):
     return render(request, 'accounts/register.html', {'form': form})
 
 # registrar usuarios con posibilidad de ser staff
-class RegistrarUsuarioS(LoginRequiredMixin, generic.CreateView):
+class RegistrarUsuarioS(LoginRequiredMixin, AdminMixin, generic.CreateView):
     model = User
     form_class = CustomUserStaffForm
     template_name = 'accounts/registerstaff.html'
@@ -34,7 +40,7 @@ class RegistrarUsuarioS(LoginRequiredMixin, generic.CreateView):
     login_url = "login"
 
 # listar usuarios no baneados y no staff
-class ListadoUsuarios(LoginRequiredMixin, generic.ListView):
+class ListadoUsuarios(LoginRequiredMixin, AdminMixin,  generic.ListView):
     model = User
     context_object_name = 'users'
     template_name = 'accounts/listar_usuarios.html'
@@ -48,7 +54,7 @@ class ListadoUsuarios(LoginRequiredMixin, generic.ListView):
 #     # return render(self.model.objects.filter(is_active = True))
 
 # listar usuarios staff
-class ListadoUsuariosS(LoginRequiredMixin, generic.ListView):
+class ListadoUsuariosS(LoginRequiredMixin, AdminMixin, generic.ListView):
     model = User
     context_object_name = 'users'
     template_name = 'accounts/listar_usuarios.html'
@@ -58,7 +64,7 @@ class ListadoUsuariosS(LoginRequiredMixin, generic.ListView):
         return User.objects.filter(is_active = True, is_staff = True).order_by('id')
 
 # listar usuarios baneados
-class ListadoUsuariosB(LoginRequiredMixin, generic.ListView):
+class ListadoUsuariosB(LoginRequiredMixin, AdminMixin, generic.ListView):
     model = User
     context_object_name = 'users'
     template_name = 'accounts/listar_usuarios.html'
@@ -68,7 +74,7 @@ class ListadoUsuariosB(LoginRequiredMixin, generic.ListView):
         return User.objects.filter(is_active = False).order_by('id')
 
 # banear usuarios
-class banearUsuario(LoginRequiredMixin, generic.DeleteView):
+class banearUsuario(LoginRequiredMixin, AdminMixin, generic.DeleteView):
     model = User
     template_name = 'accounts/modal/userban.html'
     login_url = "login"
@@ -80,7 +86,7 @@ class banearUsuario(LoginRequiredMixin, generic.DeleteView):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 # eliminar usuarios
-class delete(LoginRequiredMixin, generic.DeleteView):
+class delete(LoginRequiredMixin, AdminMixin, generic.DeleteView):
     model = User
     template_name = 'accounts/modal/userelim.html'
     login_url = "login"
@@ -91,7 +97,7 @@ class delete(LoginRequiredMixin, generic.DeleteView):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 # actualizar usuarios cualquiera.
-class ActualizarUsuario(LoginRequiredMixin, generic.UpdateView):
+class ActualizarUsuario(LoginRequiredMixin, AdminMixin, generic.UpdateView):
     model = User
     template_name = 'accounts/modal/updateuser.html'
     form_class = UpdateUserForm
@@ -111,7 +117,7 @@ class DetailUsuario(LoginRequiredMixin, generic.DetailView):
     template_name = 'accounts/profile.html'
     login_url = "login"
 
-class DetailUsuariom(LoginRequiredMixin, generic.DetailView):
+class DetailUsuariom(LoginRequiredMixin, AdminMixin, generic.DetailView):
     model = User
     form_class = CustomUserStaffForm
     template_name = 'accounts/modal/profile.html'
